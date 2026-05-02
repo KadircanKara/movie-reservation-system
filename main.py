@@ -1,24 +1,15 @@
-from fastapi import FastAPI# , HTTPException, APIRouter, Query
-# from pydantic import BaseModel, Field
-# from mangum import Mangum
+from fastapi import FastAPI
 from routers import movies
+import models
+from database import engine
+
+# This line instructs SQLAlchemy to create all tables defined in models.py
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 # Plug the "extension cord" into the main app!
 app.include_router(movies.router)
-
-# handler = Mangum(app)
-
-# class Review(BaseModel):
-#     comment:str
-#     rating:float
-
-# class Theater(BaseModel):
-#     city:str
-#     district:str
-#     movies:list[Movie]
-
 
 @app.get("/")
 def home_page():
